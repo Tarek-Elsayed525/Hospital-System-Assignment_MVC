@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Hospital System</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Template Main CSS -->
+    <link rel="stylesheet" href="~/assets/css/main.css" />
+    <link rel="stylesheet" href="~/Hospital_System___Assignment.styles.css" asp-append-version="true" />
+</head>
+<body class="index-page">
+
+    <header id="header" class="header sticky-top">
+        <div class="branding d-flex align-items-center">
+            <div class="container position-relative d-flex align-items-center justify-content-between">
+
+                <!-- اللوجو بالتنسيق الاحترافي -->
+                <a asp-controller="Home" asp-action="Index" class="logo d-flex align-items-center me-auto text-decoration-none">
+                    <h1 class="sitename fw-bold" style="font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;">
+                        Hospital<span style="color: #0d6efd; margin: 0 2px;">-</span>System
+                    </h1>
+                </a>
+
+                <!-- القائمة الرئيسية -->
+                <nav id="navmenu" class="navmenu">
+                    <ul>
+                        <li><a asp-controller="Home" asp-action="Index" class="active">Home</a></li>
+                    </ul>
+                    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+                </nav>
+
+                <!-- الزرارين المطلوبين بنفس المسميات -->
+                <div class="d-flex align-items-center gap-2">
+                    <a class="cta-btn" asp-controller="Doctors" asp-action="Doctor">Book Appointment</a>
+                    <a class="cta-btn" asp-controller="Appointments" asp-action="Index" style="background-color: #4f46e5; border-color: #4f46e5;">All Appointments</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- الخلفية العامة المطبقة على كل الصفحات هنا -->
+    <main class="main position-relative text-white py-5" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('@Url.Content("~/assets/img/hero-bg.jpg")') center center / cover no-repeat; min-height: 100vh; width: 100%;">
+        <div class="container my-4">
+            @RenderBody()
+        </div>
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/js/main.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

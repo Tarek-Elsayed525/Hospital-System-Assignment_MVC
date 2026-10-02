@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Hospital_System___Assignment.Models.BookAppointment>
+
+@{
+    ViewData["Title"] = "All Appointments";
+}
+
+<div class="container my-5">
+    <div class="card shadow-lg border-0 p-4 rounded-4 bg-white text-dark">
+        <div class="card-body">
+            <h2 class="text-center mb-4 fw-bold text-dark">All Appointments</h2>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Specialization</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@item.PatientName</td>
+                                    <td>@(item.Doctor != null ? item.Doctor.DoctorName : "N/A")</td>
+                                    <td>@(item.Doctor != null ? item.Doctor.Specialization : "N/A")</td>
+                                    <td>@item.AppointmentDate.ToString("yyyy-MM-dd")</td>
+                                    <td><span class="badge bg-success">@item.AppointmentTime</span></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-secondary">No appointments found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

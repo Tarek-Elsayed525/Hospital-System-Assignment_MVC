@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Hospital_System___Assignment.Models.Doctor>
+
+@{
+    ViewData["Title"] = "Our Doctors";
+}
+
+<!-- غلاف عام يغطي محتوى صفحة الأطباء -->
+<div class="container my-5">
+
+    <!-- عنوان الصفحة -->
+    <div class="text-center mb-5" data-aos="fade-in">
+        <h2 class="fw-bold display-4 mb-3 text-dark">Our Doctors</h2>
+        <p class="lead text-secondary mb-0 fs-5">Find our expert medical professionals dedicated to your health and care.</p>
+    </div>
+
+    <!-- فورم البحث والفلترة -->
+    <form method="get" asp-action="Doctor" class="row g-3 mb-5 p-4 bg-white text-dark shadow-sm rounded-4 align-items-center border">
+        <div class="col-md-5">
+            <input type="text" name="searchName" value="@ViewBag.SearchName" class="form-control py-2 rounded-pill px-3" placeholder="Search by name" />
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="searchSpecialization" value="@ViewBag.SearchSpecialization" class="form-control py-2 rounded-pill px-3" placeholder="Search by specialization" />
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-50 py-2 rounded-pill fw-semibold shadow-sm">Filter</button>
+            <a asp-action="Doctor" class="btn btn-secondary w-50 py-2 rounded-pill fw-semibold shadow-sm text-center">Reset</a>
+        </div>
+    </form>
+
+    <!-- قائمة عرض الدكاترة -->
+    <div class="row gy-4">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="team-member d-flex align-items-start card border-0 shadow-sm p-4 rounded-4 h-100 bg-white text-dark">
+                        <div class="pic me-4">
+                            <img src="@Url.Content("~/assets/img/doctors/" + item.DoctorImage)"
+                                 class="img-fluid rounded-circle shadow-sm"
+                                 style="width: 120px; height: 120px; object-fit: cover;"
+                                 alt="@item.DoctorName"
+                                 onerror="this.src='/assets/img/doctors/default.jpg'" />
+                        </div>
+                        <div class="member-info w-100">
+                            <h4 class="fw-bold text-dark mb-1">@item.DoctorName</h4>
+                            <span class="text-primary fw-semibold d-block mb-2">@item.Specialization</span>
+                            <p class="text-secondary small mb-3">Providing professional medical consultation and patient care.</p>
+
+                            <!-- زر الحجز المربوط بـ Appointments/Create وإرسال الـ ID الصحيح -->
+                            <a asp-controller="Appointments" asp-action="Create" asp-route-id="@item.DoctorId"
+                               class="btn btn-primary btn-sm fw-semibold px-4 py-2 rounded-pill shadow-sm">
+                                Make Appointment
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <p class="text-secondary fs-5">No doctors match your search criteria.</p>
+            </div>
+        }
+    </div>
+
+    <!-- أزرار Pagination -->
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav aria-label="Doctors Navigation" class="mt-5">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link rounded-pill px-3 me-2 shadow-sm text-dark bg-white" asp-action="Doctor" asp-route-page="@(ViewBag.CurrentPage - 1)" asp-route-searchName="@ViewBag.SearchName" asp-route-searchSpecialization="@ViewBag.SearchSpecialization">
+                        <i class="bi bi-chevron-left"></i> Previous
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                        <a class="page-link rounded-circle mx-1 text-center fw-bold shadow-sm @(ViewBag.CurrentPage == i ? "bg-primary text-white" : "bg-white text-dark")"
+                           style="width: 40px; height: 40px; line-height: 28px;"
+                           asp-action="Doctor" asp-route-page="@i" asp-route-searchName="@ViewBag.SearchName" asp-route-searchSpecialization="@ViewBag.SearchSpecialization">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link rounded-pill px-3 ms-2 shadow-sm text-dark bg-white" asp-action="Doctor" asp-route-page="@(ViewBag.CurrentPage + 1)" asp-route-searchName="@ViewBag.SearchName" asp-route-searchSpecialization="@ViewBag.SearchSpecialization">
+                        Next <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+
+</div>
