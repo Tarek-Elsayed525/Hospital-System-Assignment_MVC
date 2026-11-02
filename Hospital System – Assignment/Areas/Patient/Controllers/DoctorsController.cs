@@ -1,16 +1,22 @@
-﻿using Hospital_System___Assignment.Date;
+﻿using Hospital_System___Assignment.Reposatries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital_System___Assignment.Controllers
 {
+    [Area("Patient")]
     public class DoctorsController : Controller
     {
-        private readonly ApplicationDBContext _context = new ApplicationDBContext();
+        private readonly IUnitOfWork _unitOfWork;
+
+        public DoctorsController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
 
         public IActionResult Doctor(string searchName, string searchSpecialization, int page = 1)
         {
 
-            var query = _context.Doctors.AsQueryable();
+            var query = _unitOfWork.Doctors.Query();
 
             if (!string.IsNullOrEmpty(searchName))
             {

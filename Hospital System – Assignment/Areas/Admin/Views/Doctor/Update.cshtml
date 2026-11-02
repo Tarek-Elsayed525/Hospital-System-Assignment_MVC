@@ -1,0 +1,113 @@
+﻿@model Hospital_System___Assignment.Models.Doctor
+
+@{
+    ViewData["Title"] = "Update Doctor";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Update Doctor Details</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-action="Index">Manage Doctors</a></li>
+        <li class="breadcrumb-item active">Update</li>
+    </ol>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-warning text-dark">
+            <i class="fas fa-user-edit me-1"></i> Edit Doctor Information
+        </div>
+        <div class="card-body">
+            <!-- تحديد طريقة الـ POST وإضافة الـ enctype المخصص لرفع الملفات -->
+            <form asp-action="Update" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <!-- حقول مخفية للحفاظ على الـ ID والصورة القديمة أثناء الـ Post -->
+                <input type="hidden" asp-for="DoctorId" />
+                <input type="hidden" asp-for="DoctorImage" />
+
+                <div class="mb-3">
+                    <label asp-for="DoctorName" class="form-label font-weight-bold">Doctor Name</label>
+                    <input asp-for="DoctorName" class="form-control" placeholder="Enter doctor's full name" />
+                    <span asp-validation-for="DoctorName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Specialization" class="form-label font-weight-bold">Specialization</label>
+                    <input asp-for="Specialization" class="form-control" placeholder="e.g., Cardiology, Neurology" />
+                    <span asp-validation-for="Specialization" class="text-danger"></span>
+                </div>
+
+                <!-- قسم إدارة الصورة الشخصية -->
+                <div class="mb-3">
+                    <label class="form-label font-weight-bold">Doctor Photo</label>
+                    <div class="form-text text-muted mb-2">Upload a new photo for the doctor (optional)</div>
+                    
+                    <div class="row mb-3 align-items-center">
+                        <!-- عرض الصورة الحالية (القديمة) -->
+                        <div class="col-md-6 text-center">
+                            <p class="text-muted fw-bold">Current Photo:</p>
+                            @if (!string.IsNullOrEmpty(Model.DoctorImage))
+                            {
+                                <img src="~/assets/img/doctors/@Model.DoctorImage" alt="Current Doctor Photo" class="img-thumbnail rounded shadow-sm" style="width: 150px; height: 150px; object-fit: cover;" />
+                                
+                                <!-- Checkbox لحذف الصورة الحالية -->
+                                <div class="form-check mt-2 d-flex justify-content-center align-items-center">
+                                    <input class="form-check-input me-2" type="checkbox" name="RemoveImage" value="true" id="RemoveImageCheck">
+                                    <label class="form-check-label text-danger fw-bold" for="RemoveImageCheck" style="cursor: pointer;">
+                                        <i class="fas fa-trash-alt me-1"></i> Remove current photo
+                                    </label>
+                                </div>
+                            }
+                            else
+                            {
+                                <img src="~/assets/img/doctors/default.png" alt="Default Photo" class="img-thumbnail rounded shadow-sm" style="width: 150px; height: 150px; object-fit: cover;" />
+                                <p class="text-muted small mt-1">No photo uploaded</p>
+                            }
+                        </div>
+
+                        <!-- معاينة الصورة الجديدة عند اختيارها -->
+                        <div class="col-md-6 text-center">
+                            <p class="text-muted fw-bold">New Photo Preview:</p>
+                            <img id="imagePreview" src="#" alt="New Preview" class="img-thumbnail rounded shadow-sm d-none" style="width: 150px; height: 150px; object-fit: cover;" />
+                        </div>
+                    </div>
+
+                    <!-- حقل اختيار الملف الواحد المرتبط بالجافاسكريبت وباسم image للكونترولر -->
+                    <input type="file" name="image" id="doctorImageInput" class="form-control" accept="image/*" />
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-warning px-4 text-white fw-bold">
+                        <i class="fas fa-sync-alt me-1"></i> Update
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary px-4">
+                        <i class="fas fa-arrow-left me-1"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        // سكربت معاينة الصورة الجديدة فور اختيارها
+        document.getElementById('doctorImageInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('imagePreview');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "#";
+                preview.classList.add('d-none');
+            }
+        });
+    </script>
+}

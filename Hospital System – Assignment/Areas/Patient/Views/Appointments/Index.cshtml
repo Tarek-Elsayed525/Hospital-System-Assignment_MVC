@@ -43,6 +43,35 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- أزرار الـ Pagination الاحترافية -->
+            @if (ViewBag.TotalPages > 1)
+            {
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+
+                        <!-- زر السابق (Previous) -->
+                        <li class="page-item @(ViewBag.currentpage == 1 ? "disabled" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.currentpage - 1)">Previous</a>
+                        </li>
+
+                        <!-- أرقام الصفحات -->
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            <li class="page-item @(ViewBag.currentpage == i ? "active" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+
+                        <!-- زر التالي (Next) -->
+                        <li class="page-item @(ViewBag.currentpage == ViewBag.TotalPages ? "disabled" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.currentpage + 1)">Next</a>
+                        </li>
+
+                    </ul>
+                </nav>
+            }
+
         </div>
     </div>
 </div>

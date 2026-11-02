@@ -15,6 +15,6 @@ namespace Hospital_System___Assignment.Models
 
         public int DoctorId { get; set; }
         [ForeignKey("DoctorId")]
-        public Doctor Doctor { get; set; }
+        public Doctor? Doctor { get; set; }
     }
 }

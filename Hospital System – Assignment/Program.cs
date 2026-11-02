@@ -1,3 +1,7 @@
+using Hospital_System___Assignment.Date;
+using Hospital_System___Assignment.Reposatries;
+using Microsoft.EntityFrameworkCore;
+
 namespace Hospital_System___Assignment
 {
     public class Program
@@ -8,6 +12,20 @@ namespace Hospital_System___Assignment
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                            ?? throw new InvalidOperationException("Connection string"
+                                          + "'DefaultConnection' not found.");
+
+            builder.Services.AddDbContext<ApplicationDBContext>(options =>
+                options.UseSqlServer(connectionString));
+
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
+
+
 
             var app = builder.Build();
 
@@ -27,7 +45,7 @@ namespace Hospital_System___Assignment
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{area=Admin}/{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
             app.Run();

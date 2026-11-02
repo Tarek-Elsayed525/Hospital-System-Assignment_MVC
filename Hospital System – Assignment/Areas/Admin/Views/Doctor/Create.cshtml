@@ -1,0 +1,81 @@
+﻿@model Hospital_System___Assignment.Models.Doctor
+
+@{
+    ViewData["Title"] = "Add New Doctor";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Add New Doctor</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-action="Index">Manage Doctors</a></li>
+        <li class="breadcrumb-item active">Create</li>
+    </ol>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-user-plus me-1"></i> Doctor Information
+        </div>
+        <div class="card-body">
+            <!-- تحديد طريقة الـ POST وإضافة الـ enctype للتعامل مع رفع الصور -->
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="DoctorName" class="form-label font-weight-bold">Doctor Name</label>
+                    <input asp-for="DoctorName" class="form-control" placeholder="Enter doctor's full name" />
+                    <span asp-validation-for="DoctorName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Specialization" class="form-label font-weight-bold">Specialization</label>
+                    <input asp-for="Specialization" class="form-control" placeholder="e.g., Cardiology, Neurology" />
+                    <span asp-validation-for="Specialization" class="text-danger"></span>
+                </div>
+
+                <!-- حقل اختيار الصورة مع مطابقة الاسم لـ image في الـ Controller ومعاينة احترافية -->
+                <div class="mb-3">
+                    <label class="form-label font-weight-bold">Doctor Photo</label>
+                    <input type="file" name="image" id="doctorImageInput" class="form-control" accept="image/*" />
+                    
+                    <!-- صندوق المعاينة الفورية -->
+                    <div class="mt-3 text-center" style="max-width: 200px;">
+                        <img id="imagePreview" src="#" alt="Doctor Preview" class="img-thumbnail rounded shadow-sm d-none" style="width: 150px; height: 150px; object-fit: cover;" />
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="fas fa-save me-1"></i> Save
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary px-4">
+                        <i class="fas fa-arrow-left me-1"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        // سكربت معاينة الصورة قبل الرفع
+        document.getElementById('doctorImageInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('imagePreview');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "#";
+                preview.classList.add('d-none');
+            }
+        });
+    </script>
+}

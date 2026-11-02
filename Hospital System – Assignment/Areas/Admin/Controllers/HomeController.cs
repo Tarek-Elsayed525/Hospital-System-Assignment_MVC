@@ -2,8 +2,9 @@ using Hospital_System___Assignment.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace Hospital_System___Assignment.Controllers
+namespace Hospital_System___Assignment.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class HomeController : Controller
     {
         public IActionResult Index()
